@@ -1,0 +1,25 @@
+### 服务器与镜像信息：
+
+1.     最新build出来的ISO文件位于：http://10.240.205.130/pub/jenkins/thinkcloud/
+2.     服务器 10.240.205.155  sysadm/xStack4red
+3.     155上，镜像放置位置：/srv/iso。部署脚本：/home/sysadm/fuel_create_sh
+
+### 部署过程：
+
+1.     首先，下载最新的ISO文件到/srv/iso目录下；
+2.     修改部署脚本create-roller-master.sh中iso_image="/srv/iso/Roller_2016-11-13.iso"指向最新的iso文件；
+3.     创建site0-admin, site0-public site0-storage网络，其中storage不用有ipv4 configuration
+4.     执行./create-roller-master.sh site0，创建Roller虚机（site-master)，中间需要手动重启一次，如果不使用默认的admin ip等设置，需在安装时进入Roller的配置界面进行修改.
+5.     登陆10.20.0.2:8000(default)，确定Roller安装成功；
+6.     执行./create-roller-slaves.sh site0 4，创建openstack节点（puppet slaves节点）
+7.     在Roller页面进行配置之后，验证网络，部署安装。
+
+#### 注意事项：
+
+1.     重装部署节点，采用CentOS+KVM虚拟机的方式，将部署的OS安装在KVM虚拟机里面。而且装好后，先做快照或者备份文件。
+2.     导入许可文件后，点击设置，并确认存储设置中默认的ceph为Nova、Cinder和Glance提供统一存储的选项被选中。可以根据需要更改ceph的副本数，一般修改为3副本。
+3.     添加controller节点时，将controller+mongo角色选中。添加compute节点时，将compute+ceph-osd选中。
+4.     配置controller节点磁盘信息时，将sda分5000MB给Image，剩余的sda都分给系统盘。剩下的sdb-sdn，都分给mongodb使用。
+5.     配置compute节点磁盘信息时，将sda分5000MB给Image，剩余的sda都分给系统盘。剩下的sdb-sdn，都分给ceph使用，ceph joural日志分区都设置为0。
+6.     网络配置不变，请您们重装Roller后再一次进行部署。
+
