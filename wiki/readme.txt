@@ -1,5 +1,5 @@
-###### Would you like a persenal wiki like this?
-#### How to Start!
+# Would you like a persenal wiki like this?
+### How to Start!
 
 ```
 # git clone https://github.com/alswell/PyHtmlEx.git
@@ -12,7 +12,7 @@ Open browser and visit http://<server-ip>:<port>
 ```
 You can just put you txt file under "./static/blog/", and directory is supported as well!
 * * *
-#### Examples:
+### Examples:
 - python code
 ``` py
 import sys
