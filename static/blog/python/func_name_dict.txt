@@ -32,7 +32,7 @@ cluster = Cluster()
 cluster.get(ctxt, 1)
 cluster.create(ctxt, "111", "222", aa=1)
 ```
-
+使用
 ```
 f.func_name: func
 f.func_dict {'test': 111, 'test2': 222}

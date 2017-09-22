@@ -103,7 +103,7 @@ def body_main():
     # a.inner_html = 'python'
     # left.push_back(a)
 
-    right_style = md_parser(right, os.path.join(os.path.dirname(__file__)), 'readme')
+    right_style = md_parser(right, os.path.join(os.path.dirname(__file__)), 'readme.txt')
     style.extend(right_style)
     # right.push_back(Resume().form)
 

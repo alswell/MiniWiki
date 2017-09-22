@@ -18,11 +18,17 @@ class BlogList(object):
                 url = '/blog/%s/%s/' % (category, dirname)
                 ret['dir'][url] = (parent, dirname.decode('GBK'))  # dir.decode('GBK')
 
-            for title in filenames:
-                if title[0] == '.':
+            for filename in filenames:
+                if filename[0] == '.':
                     continue
-                url = '/blog/%s/%s' % (category, title)
-                ret['file'][url] = (parent, title[:-4].decode('GBK'))
+                url = '/blog/%s/%s' % (category, filename)
+                with open(parent + '/' + filename, 'r') as f:
+                    title = f.readline()
+                    if title.startswith('# '):
+                        title = title[2:]
+                    else:
+                        title = filename[:-4].decode('GBK')
+                ret['file'][url] = (parent, title, filename)
             break
         cls.blog_list[category] = ret
         return ret
@@ -84,7 +90,7 @@ def blog_list_body(category):
 def blog_page_body(category, id):
     file_list = BlogList.get(category)
     url = '/blog/%s/%s' % (category, id)
-    pathname, title = BlogList.blog_list[category]['file'][url]
+    pathname, title, filename = BlogList.blog_list[category]['file'][url]
 
     bread = _mk_bread(category, title)
 
@@ -93,7 +99,7 @@ def blog_page_body(category, id):
     for ls in file_list:
         left.push_back(ls)
 
-    right_style = md_parser(right, pathname, title)
+    right_style = md_parser(right, pathname, filename)
 
     style.extend(right_style)
 

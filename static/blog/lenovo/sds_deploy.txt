@@ -1,3 +1,5 @@
+# SDS Deployment
+
 ### KVM 环境准备：
 
 - Note：
@@ -62,10 +64,23 @@ node1)
 ## 其他配置：
 为方便之后的工作，配置所需要的其他非必须选项，如controller 到node 的ssh免密登录。Controller的大网IP等。
 
-大网IP的配置，可以使用71服务器上/root/Desktop 目录下的两个脚本来探测已使用和未使用的10.240.217网段的大网 IP。直接执行即可。
+大网IP的配置，可以使用脚本来探测已使用和未使用的10.240.217网段的大网 IP。直接执行即可。
 ```
-ip_scan_in_using.sh 
-ip_scan_not_using.sh
+#! /bin/bash
+trap '{ echo "Ctrl-C to quit." ; exit 1; }' INT
+
+for i  in $(seq 100 1 254)
+do
+    ip="10.240.217.$i"
+    r=`ping -c 1 -w 3 $ip | grep from | awk -F '[ :]' '{print $4}'`
+    if test -z $r
+    then
+        echo -e "\033[47;32m $ip \033[0m"
+    else
+        echo -e "\033[31m $ip \033[0m"
+    fi
+done
+
 ```
 * * *
 ### sds1.1 安装：
@@ -85,9 +100,9 @@ cd deployment
 source ~/localrc
 #该步骤会在命令行立即返回，但会在界面等待约10到20分钟的时间。
 cephmgmtclient create-cluster --name cluster1 --addr shanghai
-cephmgmtclient create-server --id 1 --name node-1 --publicip 192.168.2.3 --clusterip 192.168.0.3 --server_user root --server_pass passw0rd --parent_bucket 1
-cephmgmtclient create-server --id 1 --name node-2 --publicip 192.168.2.4 --clusterip 192.168.0.4 --server_user root --server_pass passw0rd --parent_bucket 1
-cephmgmtclient create-server --id 1 --name node-3 --publicip 192.168.2.5 --clusterip 192.168.0.5 --server_user root --server_pass passw0rd --parent_bucket 1
+cephmgmtclient create-server --id 1 --name node-1 --publicip 192.168.81.3 --clusterip 192.168.82.3 --server_user root --server_pass passw0rd --parent_bucket 1
+cephmgmtclient create-server --id 1 --name node-2 --publicip 192.168.81.4 --clusterip 192.168.82.4 --server_user root --server_pass passw0rd --parent_bucket 1
+cephmgmtclient create-server --id 1 --name node-3 --publicip 192.168.81.5 --clusterip 192.168.82.5 --server_user root --server_pass passw0rd --parent_bucket 1
 ```
 ```
 #如果需要，创建第二个集群，并添加主机（需要再创建3个VM）:

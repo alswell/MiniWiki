@@ -1,3 +1,4 @@
+# OpenStack获得认证
 搭建起一套OpenStack的环境之后，若要运行指定的API怎么做？OpenStack各个组件/项目也都是基于Web Service的，因此一样用curl发HTTP请求即可。原理都是一样。首先，通过提供租户、用户名和密码，获得认证用的token和指定API所在项目的URL；然后利用此token和该URL就可以运行想要执行的指定API了。下面是详细代码讲解。
 1. 利用get_token.sh获得token和compute URL（因为我们后面将执行一个Nova的API）. get_token.sh如下：
 ```
